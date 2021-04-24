@@ -55,7 +55,14 @@ func main() {
 	err = json.Unmarshal([]byte(workspaceStateFile), &workspaceState)
 	checkError(err)
 
-	fmt.Println(workspaceState.Object.Dependencies)
+	for _, dependency := range workspaceState.Object.Dependencies {
+		for acknowledgementIndex := 0; acknowledgementIndex < len(acknowledgements); acknowledgementIndex++ {
+			if acknowledgements[acknowledgementIndex].PackageName == dependency.PackageRef.Name {
+				acknowledgements[acknowledgementIndex].URL = dependency.PackageRef.Path
+				break
+			}
+		}
+	}
 
 	err = createJSONFile(acknowledgements, appendFileToPath(outputPath, "acknowledgements.json"))
 	checkError(err)
