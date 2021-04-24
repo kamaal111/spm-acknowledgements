@@ -59,6 +59,10 @@ func main() {
 		for acknowledgementIndex := 0; acknowledgementIndex < len(acknowledgements); acknowledgementIndex++ {
 			if acknowledgements[acknowledgementIndex].PackageName == dependency.PackageRef.Name {
 				acknowledgements[acknowledgementIndex].URL = dependency.PackageRef.Path
+				if strings.Contains(dependency.PackageRef.Path, "github") {
+					splittedURL := strings.Split(dependency.PackageRef.Path, "/")
+					acknowledgements[acknowledgementIndex].Author = splittedURL[len(splittedURL)-2]
+				}
 				break
 			}
 		}
