@@ -102,7 +102,6 @@ type WorkspaceState struct {
 	Object WorkspaceStateObject `json:"object"`
 }
 
-// Acknowledgement - structure of an acknowledgement object
 type Acknowledgement struct {
 	PackageName string `json:"package_name,omitempty"`
 	Content     string `json:"content,omitempty"`
