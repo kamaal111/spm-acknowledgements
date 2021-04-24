@@ -48,11 +48,46 @@ func main() {
 		}
 	}
 
+	workspaceStateFile, err := ioutil.ReadFile(appendFileToPath(spmPath, "../workspace-state.json"))
+	checkError(err)
+
+	workspaceState := WorkspaceState{}
+	err = json.Unmarshal([]byte(workspaceStateFile), &workspaceState)
+	checkError(err)
+
+	fmt.Println(workspaceState.Object.Dependencies)
+
 	err = createJSONFile(acknowledgements, appendFileToPath(outputPath, "acknowledgements.json"))
 	checkError(err)
 
 	timeElapsed := time.Since(startTimer)
 	fmt.Printf("Created acknowledgements file in %s ✨\n", timeElapsed)
+}
+
+type WorkspaceStateDependenciesPackageRef struct {
+	Path string `json:"path"`
+	Name string `json:"name"`
+}
+
+type WorkspaceStateDependenciesStateCheckoutState struct {
+	Version string `json:"version"`
+}
+
+type WorkspaceStateDependenciesState struct {
+	CheckoutState WorkspaceStateDependenciesStateCheckoutState `json:"checkoutState"`
+}
+
+type WorkspaceStateDependencies struct {
+	PackageRef WorkspaceStateDependenciesPackageRef `json:"packageRef"`
+	State      WorkspaceStateDependenciesState      `json:"state"`
+}
+
+type WorkspaceStateObject struct {
+	Dependencies []WorkspaceStateDependencies `json:"dependencies"`
+}
+
+type WorkspaceState struct {
+	Object WorkspaceStateObject `json:"object"`
 }
 
 // Acknowledgement - structure of an acknowledgement object
